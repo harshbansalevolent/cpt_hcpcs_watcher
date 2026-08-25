@@ -1,0 +1,42 @@
+[scraping]
+base_url = "https://www.cms.gov"
+main_url = "https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/cpt-hcpcs"
+
+# Match the year-labeled CPT/HCPCS download links.
+# Handles the "CPT/HCPCS" vs "CPT/HCPCs" casing variation across years.
+keyword_regex = '(?i)medicare risk adjustment eligible cpt\s*/\s*hcpcs\s+codes'
+
+# Extract the year (the leading 20xx in the link text)
+year_regex = '\b(20\d{2})\b'
+
+# CPT/HCPCS files may be zip/xlsx/csv/pdf; treat any of these as the file.
+file_extensions = [".zip", ".xlsx", ".xls", ".csv", ".txt", ".pdf"]
+
+# Written into the CSV "directory" column (kept for schema parity)
+directory_label = "CPT/HCPCS Codes"
+
+retries = 3
+request_delay = 1
+timeout = 30
+
+[storage]
+csv_file = "cpt_files.csv"
+
+[alert]
+enabled = true
+send_via = "teams"
+to = ["harsh.bansal@evolenthealth.com"]
+subject = "New Medicare Risk Adjustment CPT/HCPCS Codes posted"
+source_label = "the CMS Medicare Risk Adjustment Eligible CPT/HCPCS Codes page"
+
+[alert.smtp]
+host = "smtp.sendgrid.net"
+port = 587
+from_address = "cpt-watcher@yourdomain.com"
+use_tls = true
+use_auth = true
+
+[http]
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+accept_language = "en-US,en;q=0.9"
