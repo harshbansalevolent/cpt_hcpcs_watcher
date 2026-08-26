@@ -2,7 +2,7 @@ name: cpt_hcpcs_watcher
 
 on:
   schedule:
-    - cron: "0 13 */3 * *"     # every 2 days at 13:00 UTC = 9 AM ET
+    - cron: "0 13 */3 * *"     # every 3 days at 13:00 UTC = 9 AM ET
   workflow_dispatch:
 
 permissions:
